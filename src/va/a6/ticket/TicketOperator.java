@@ -11,21 +11,36 @@ import java.io.IOException;
 public class TicketOperator extends HttpServlet {
 
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        TicketSale ticketSale = (TicketSale) request.getServletContext().getAttribute("ticketSale");
-        System.out.println(request.getHeader("referer"));
-
         try {
-            int ticketNumber = Integer.parseInt(request.getParameter("ticketNumber"));
-
-            if (ticketSale.buyTicket(ticketSale.getTickets()[ticketNumber-1])){
+            if (operate(request)) {
                 request.getRequestDispatcher("/Operation_erfolgreich_ausgefuehrt.html").forward(request, response);
-//                response.sendRedirect("Operation_erfolgreich_ausgefuehrt.html");
             } else {
                 response.sendRedirect("Fehler.html");
             }
-
         } catch (NumberFormatException | ServletException e) {
             response.sendRedirect("Fehler.html");
+        }
+    }
+
+    public boolean operate(HttpServletRequest request) {
+        TicketSale ticketSale = (TicketSale) request.getServletContext().getAttribute("ticketSale");
+        String referer = request.getHeader("referer");
+        switch (referer) {
+            case "Verkauf_eines_Tickets.html":
+                int ticketNumber = Integer.parseInt(request.getParameter("ticketNumber"));
+                return ticketSale.buyTicket(ticketSale.getTickets()[ticketNumber-1]);
+            case "Reservierung_eines_Tickets.html":
+                int ticketReservationNumber = Integer.parseInt(request.getParameter("ticketNumber"));
+                String ticketOwner = request.getParameter("ticketOwner");
+                return ticketSale.reserveTicket(ticketSale.getTickets()[ticketReservationNumber-1], ticketOwner);
+            case "Verkauf_eines_freien_Tickets.html":
+                int ticketNumberToCancel = Integer.parseInt(request.getParameter("ticketNumber"));
+                return ticketSale.cancelTicket(ticketSale.getTickets()[ticketNumberToCancel-1]);
+            case "Verkauf_eines_reservierten_Tickets.html":
+                int ticketReservationNumberToCancel = Integer.parseInt(request.getParameter("ticketNumber"));
+                return ticketSale.cancelTicketReservation(ticketSale.getTickets()[ticketReservationNumberToCancel-1]);
+            default:
+                return false;
         }
     }
 }
