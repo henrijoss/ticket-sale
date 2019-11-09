@@ -1,8 +1,12 @@
 package va.a6.ticket;
 
 public class TicketSaleException extends RuntimeException {
+
+    public static String error;
+
     public TicketSaleException(TicketState ticketState) {
         super("Das Ticket ist bereits " + showCorrectError(ticketState));
+        error = "Das Ticket ist bereits " + showCorrectError(ticketState);
     }
 
     public static String showCorrectError(TicketState ticketState) {

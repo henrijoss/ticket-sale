@@ -19,7 +19,7 @@ public class TicketSale {
         this.reservationsPossible = reservationsPossible;
     }
 
-    Ticket[] getTickets() {
+    public Ticket[] getTickets() {
         return tickets;
     }
 

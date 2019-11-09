@@ -1,7 +1,29 @@
-table {
-  border-collapse: collapse;
+div.ticket-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 20rem;
+  height: auto;
 }
 
-table, th, td {
+div.ticket {
+  width: 30px;
+  height: 30px;
   border: 1px solid black;
+  border-collapse: collapse;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.FREE {
+  background-color: lawngreen;
+}
+
+.RESERVED {
+  background-color: cornflowerblue;
+}
+
+.SOLD {
+  background-color: red;
 }

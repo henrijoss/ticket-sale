@@ -1,4 +1,5 @@
-<%--
+<%@ page import="va.a6.ticket.TicketSale" %>
+<%@ page import="va.a6.ticket.Ticket" %><%--
   Created by IntelliJ IDEA.
   User: henrijoss
   Date: 05.11.19
@@ -7,35 +8,47 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <head>
+<head>
     <title>Kartenverkauf</title>
-    <link rel="stylesheet" href="style/style.css" />
-  </head>
-  <body>
-  <%!
-    private int counter = 0;
-    public synchronized int next() {
-      counter++;
-      return counter;
+    <link rel="stylesheet" href="style/style.css"/>
+</head>
+<body>
+
+<%
+    ServletContext sc = request.getServletContext();
+    TicketSale ticketSale = (TicketSale) sc.getAttribute("ticketSale");
+%>
+<h1>Kartenverkauf</h1>
+<div class="ticket-container">
+    <%
+        for (int i = 0; i < 100; i++) {
+    %>
+    <div class="ticket <%= ticketSale.getTickets()[i].getTicketState() %>">
+        <p>
+            <%= ticketSale.getTickets()[i].getId() %>
+        </p>
+    </div>
+    <%
+        }
+    %>
+</div>
+<%
+    if (ticketSale.isReservationsPossible()) {
+%>
+<p>Reservierungen können noch angenommen werden</p>
+<%
+} else {
+%>
+<p>Reservierungen nicht mehr möglich</p>
+<%
     }
-  %>
-  <h1>Kartenverkauf</h1>
-  <table>
-    <%
-      for (int i = 1; i < 11; i++) {
-    %>
-        <tr>
-          <%
-            for (int j = 1; j < 11; j++) {
-              %>
-                <td><%= next() %></td>
-              <%
-            }
-          %>
-        </tr>
-    <%
-      }
-    %>
-  </table>
-  </body>
+%>
+
+<a href="Verkauf_eines_freien_Tickets.html">Verkauf eines freien Tickets</a><br />
+<a href="Reservierung_eines_Tickets.html">Reservierung eines Tickets</a><br />
+<a href="Verkauf_eines_reservierten_Tickets.html">VErkauf eines reservierten Tickets</a><br />
+<a href="Stornierung_eines_Tickets.html">Stornierung eines Tickets</a><br />
+<a href="Reservierungen_aufheben.html">Reservierungen aufheben</a>
+
+</body>
 </html>
