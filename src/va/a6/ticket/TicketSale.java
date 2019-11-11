@@ -23,9 +23,9 @@ public class TicketSale {
         return tickets;
     }
 
-    public void setTickets(Ticket[] tickets) {
-        this.tickets = tickets;
-    }
+//    public void setTickets(Ticket[] tickets) {
+//        this.tickets = tickets;
+//    }
 
     public boolean buyTicket(Ticket ticket) {
         if (checkTicketState(TicketState.FREE, ticket)) {

@@ -20,6 +20,7 @@ public class TicketOperator extends HttpServlet {
             }
         } catch (NumberFormatException | ServletException e) {
             request.getRequestDispatcher("/Fehler.jsp").forward(request, response);
+//            response.sendRedirect("Fehler.html");
         }
     }
 

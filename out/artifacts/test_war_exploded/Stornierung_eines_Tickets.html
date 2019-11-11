@@ -7,9 +7,9 @@
 </head>
 <body>
 <h1>Stornierung eines Tickets</h1>
-<form action="">
+<form action="TicketOperator" method="post">
     <label>Sitzplatznummer</label>
-    <input type="number" min="1" max="100"/>
+    <input type="number" name="ticketNumber" min="1" max="100"/>
     <input class="hidden" name="operation" value="cancelTicket"/>
     <input type="submit" value="ausführen"/>
 </form>
