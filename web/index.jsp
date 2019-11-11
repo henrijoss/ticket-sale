@@ -21,7 +21,7 @@
 <h1>Kartenverkauf</h1>
 <div class="ticket-container">
     <%
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < ticketSale.getTickets().length; i++) {
     %>
     <div class="ticket <%= ticketSale.getTickets()[i].getTicketState() %>">
         <p>

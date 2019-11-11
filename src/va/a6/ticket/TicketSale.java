@@ -36,12 +36,15 @@ public class TicketSale {
     }
 
     public boolean reserveTicket(Ticket ticket, String reservationName) {
-        if (checkTicketState(TicketState.FREE, ticket)) {
-            ticket.setTicketState(TicketState.RESERVED);
-            ticket.setTicketOwner(reservationName);
-            return true;
+        if (reservationsPossible) {
+            if (checkTicketState(TicketState.FREE, ticket)) {
+                ticket.setTicketState(TicketState.RESERVED);
+                ticket.setTicketOwner(reservationName);
+                return true;
+            }
+            throw new TicketSaleException(ticket.getTicketState());
         }
-        throw new TicketSaleException(ticket.getTicketState());
+        return false;
     }
 
     public boolean cancelTicketReservation(Ticket ticket) {
