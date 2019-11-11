@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Kartenverkauf</title>
+    <link rel="stylesheet" href="style/style.css"/>
 </head>
 <body>
 <h1>Reservierung eines Tickets</h1>
@@ -11,6 +12,7 @@
     <input type="number" name="ticketNumber" min="1" max="100" />
     <label>Reservierungsname</label>
     <input type="text" name="ticketOwner"/>
+    <input class="hidden" name="operation" value="reservateTicket"/>
     <input type="submit" value="ausführen" />
 </form>
 </body>

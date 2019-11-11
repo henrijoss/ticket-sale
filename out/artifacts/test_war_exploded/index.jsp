@@ -46,7 +46,7 @@
 
 <a href="Verkauf_eines_freien_Tickets.html">Verkauf eines freien Tickets</a><br />
 <a href="Reservierung_eines_Tickets.html">Reservierung eines Tickets</a><br />
-<a href="Verkauf_eines_reservierten_Tickets.html">VErkauf eines reservierten Tickets</a><br />
+<a href="Verkauf_eines_reservierten_Tickets.html">Verkauf eines reservierten Tickets</a><br />
 <a href="Stornierung_eines_Tickets.html">Stornierung eines Tickets</a><br />
 <a href="Reservierungen_aufheben.html">Reservierungen aufheben</a>
 

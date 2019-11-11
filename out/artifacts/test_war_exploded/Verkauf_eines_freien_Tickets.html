@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Kartenverkauf</title>
+    <link rel="stylesheet" href="style/style.css"/>
 </head>
 <body>
 <h1>Verkauf eines freien Tickets</h1>
 <form action="TicketOperator" method="post">
     <label>Sitzplatznummer</label>
     <input type="number" name="ticketNumber" min="1" max="100"/>
+    <input class="hidden" name="operation" value="buyTicket"/>
     <input type="submit" value="ausführen"/>
 </form>
 </body>

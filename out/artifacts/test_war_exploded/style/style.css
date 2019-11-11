@@ -28,4 +28,8 @@ div.ticket {
   background-color: red;
 }
 
+.hidden {
+  display: none;
+}
+
 /*# sourceMappingURL=style.css.map */
