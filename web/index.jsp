@@ -45,7 +45,17 @@
 %>
 
 <a href="Verkauf_eines_freien_Tickets.html">Verkauf eines freien Tickets</a><br />
+<%
+    if (ticketSale.isReservationsPossible()) {
+%>
 <a href="Reservierung_eines_Tickets.html">Reservierung eines Tickets</a><br />
+<%
+} else {
+%>
+<p><s>Reservierung eines Tickets</s></p>
+<%
+    }
+%>
 <a href="Verkauf_eines_reservierten_Tickets.html">Verkauf eines reservierten Tickets</a><br />
 <a href="Stornierung_eines_Tickets.html">Stornierung eines Tickets</a><br />
 <a href="Reservierungen_aufheben.html">Reservierungen aufheben</a>
