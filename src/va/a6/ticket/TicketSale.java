@@ -11,15 +11,15 @@ public class TicketSale {
         }
     }
 
-    public boolean isReservationsPossible() {
+    public synchronized boolean isReservationsPossible() {
         return reservationsPossible;
     }
 
-    public void setReservationsPossible(boolean reservationsPossible) {
+    public synchronized void setReservationsPossible(boolean reservationsPossible) {
         this.reservationsPossible = reservationsPossible;
     }
 
-    public Ticket[] getTickets() {
+    public synchronized Ticket[] getTickets() {
         return tickets;
     }
 
@@ -27,7 +27,7 @@ public class TicketSale {
 //        this.tickets = tickets;
 //    }
 
-    public boolean buyTicket(Ticket ticket) {
+    public synchronized boolean buyTicket(Ticket ticket) {
         if (checkTicketState(TicketState.FREE, ticket)) {
             ticket.setTicketState(TicketState.SOLD);
             return true;
@@ -35,7 +35,7 @@ public class TicketSale {
         throw new TicketSaleException(ticket.getTicketState());
     }
 
-    public boolean reserveTicket(Ticket ticket, String reservationName) {
+    public synchronized boolean reserveTicket(Ticket ticket, String reservationName) {
         if (reservationsPossible) {
             if (checkTicketState(TicketState.FREE, ticket)) {
                 ticket.setTicketState(TicketState.RESERVED);
@@ -47,7 +47,7 @@ public class TicketSale {
         return false;
     }
 
-    public boolean cancelTicketReservation(Ticket ticket) {
+    public synchronized boolean cancelTicketReservation(Ticket ticket) {
         if (checkTicketState(TicketState.RESERVED, ticket)) {
             ticket.setTicketState(TicketState.FREE);
             ticket.setTicketOwner(null);
@@ -56,7 +56,7 @@ public class TicketSale {
         throw new TicketSaleException(ticket.getTicketState());
     }
 
-    public boolean cancelTicket(Ticket ticket) {
+    public synchronized boolean cancelTicket(Ticket ticket) {
         if (checkTicketState(TicketState.SOLD, ticket)) {
             ticket.setTicketState(TicketState.FREE);
             return true;
@@ -64,7 +64,7 @@ public class TicketSale {
         throw new TicketSaleException(ticket.getTicketState());
     }
 
-    private boolean checkTicketState(TicketState ticketState, Ticket ticket) {
+    private synchronized boolean checkTicketState(TicketState ticketState, Ticket ticket) {
         return ticket.getTicketState() == ticketState;
     }
 }

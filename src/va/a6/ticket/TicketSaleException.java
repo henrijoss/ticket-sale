@@ -19,3 +19,5 @@ public class TicketSaleException extends RuntimeException {
         }
     }
 }
+
+// TODO: Split Exception into TicketSale and Ticket Exception with Pagescope variables
