@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Context>
+
+    <Resource name="jdbc/TicketDB" auth="Container"
+              driverClassName="org.mariadb.jdbc.Driver"
+              url="jdbc:mariadb://localhost:3306/TicketSale"
+              username="root" password="root"
+              maxactive="100" maxIdle="30" maxWait="10000"
+              logAbandoned="true" removeAbandoned="true"
+              removeAbandonedTimeout="60" type="java.sql.DataSource"/>
+</Context>

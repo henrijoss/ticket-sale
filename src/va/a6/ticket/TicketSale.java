@@ -32,7 +32,7 @@ public class TicketSale {
             ticket.setTicketState(TicketState.SOLD);
             return true;
         }
-        throw new TicketSaleException(ticket.getTicketState());
+        throw new TicketException(ticket.getTicketState());
     }
 
     public synchronized boolean reserveTicket(Ticket ticket, String reservationName) {
@@ -42,9 +42,9 @@ public class TicketSale {
                 ticket.setTicketOwner(reservationName);
                 return true;
             }
-            throw new TicketSaleException(ticket.getTicketState());
+            throw new TicketException(ticket.getTicketState());
         }
-        return false;
+        throw new TicketSaleException("Reservierungen sind nicht mehr möglich");
     }
 
     public synchronized boolean cancelTicketReservation(Ticket ticket) {
@@ -53,7 +53,7 @@ public class TicketSale {
             ticket.setTicketOwner(null);
             return true;
         }
-        throw new TicketSaleException(ticket.getTicketState());
+        throw new TicketException(ticket.getTicketState());
     }
 
     public synchronized boolean cancelTicket(Ticket ticket) {
@@ -61,7 +61,7 @@ public class TicketSale {
             ticket.setTicketState(TicketState.FREE);
             return true;
         }
-        throw new TicketSaleException(ticket.getTicketState());
+        throw new TicketException(ticket.getTicketState());
     }
 
     private synchronized boolean checkTicketState(TicketState ticketState, Ticket ticket) {

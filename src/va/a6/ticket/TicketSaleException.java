@@ -4,20 +4,20 @@ public class TicketSaleException extends RuntimeException {
 
     public static String error;
 
-    public TicketSaleException(TicketState ticketState) {
-        super(showCorrectError(ticketState));
-        error = showCorrectError(ticketState);
+    public TicketSaleException(String errorMessage) {
+        super(errorMessage);
+        error = errorMessage;
     }
 
-    public static String showCorrectError(TicketState ticketState) {
-        String ticketMessage = "Das Ticket ist bereits ";
-        switch (ticketState) {
-            case FREE: return ticketMessage + "frei";
-            case SOLD: return ticketMessage + "verkauft";
-            case RESERVED: return ticketMessage + "reserviert";
-            default: return "error";
-        }
-    }
+//    public static String showCorrectError(TicketState ticketState) {
+//        String ticketMessage = "Das Ticket ist bereits ";
+//        switch (ticketState) {
+//            case FREE: return ticketMessage + "frei";
+//            case SOLD: return ticketMessage + "verkauft";
+//            case RESERVED: return ticketMessage + "reserviert";
+//            default: return "error";
+//        }
+//    }
 }
 
-// TODO: Split Exception into TicketSale and Ticket Exception with Pagescope variables
+// TODO: Split Exception into TicketSale and Ticket Exception
