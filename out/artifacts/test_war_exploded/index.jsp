@@ -1,5 +1,6 @@
 <%@ page import="va.a6.ticket.TicketSale" %>
-<%@ page import="va.a6.ticket.Ticket" %><%--
+<%@ page import="va.a6.ticket.Ticket" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: henrijoss
   Date: 05.11.19
@@ -17,6 +18,7 @@
 <%
     ServletContext sc = request.getServletContext();
     TicketSale ticketSale = (TicketSale) sc.getAttribute("ticketSale");
+    List<Ticket> tickets = (List<Ticket>) sc.getAttribute("initialStates");
 %>
 <h1>Kartenverkauf</h1>
 <div class="ticket-container">
