@@ -1,6 +1,4 @@
 <%@ page import="va.a6.ticket.TicketSale" %>
-<%@ page import="va.a6.ticket.Ticket" %>
-<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: henrijoss
   Date: 05.11.19
@@ -18,16 +16,15 @@
 <%
     ServletContext sc = request.getServletContext();
     TicketSale ticketSale = (TicketSale) sc.getAttribute("ticketSale");
-    List<Ticket> tickets = (List<Ticket>) sc.getAttribute("initialStates");
 %>
 <h1>Kartenverkauf</h1>
 <div class="ticket-container">
     <%
-        for (int i = 0; i < ticketSale.getTickets().length; i++) {
+        for (int i = 0; i < ticketSale.getTickets().size(); i++) {
     %>
-    <div class="ticket <%= ticketSale.getTickets()[i].getTicketState() %>">
+    <div class="ticket <%= ticketSale.getTickets().get(i).getTicketState() %>">
         <p>
-            <%= ticketSale.getTickets()[i].getId() %>
+            <%= ticketSale.getTickets().get(i).getId() %>
         </p>
     </div>
     <%

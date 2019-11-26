@@ -1,14 +1,15 @@
 package va.a6.ticket;
 
+import java.util.List;
+
 public class TicketSale {
+
+    private TicketDBPreparedStatement preparedStatement = new TicketDBPreparedStatement();
     private boolean reservationsPossible = true;
+    private List<Ticket> tickets;
 
-    private Ticket[] tickets = new Ticket[100];
-
-    TicketSale() {
-        for (int i= 0; i < tickets.length; i++) {
-            tickets[i] = new Ticket(i+1);
-        }
+    TicketSale(List<Ticket> _tickets) {
+        this.tickets = _tickets;
     }
 
     public synchronized boolean isReservationsPossible() {
@@ -19,7 +20,7 @@ public class TicketSale {
         this.reservationsPossible = reservationsPossible;
     }
 
-    public synchronized Ticket[] getTickets() {
+    public synchronized List<Ticket> getTickets() {
         return tickets;
     }
 
@@ -30,6 +31,7 @@ public class TicketSale {
     public synchronized boolean buyTicket(Ticket ticket) {
         if (checkTicketState(TicketState.FREE, ticket)) {
             ticket.setTicketState(TicketState.SOLD);
+            preparedStatement.updateDB(ticket);
             return true;
         }
         throw new TicketException(ticket.getTicketState());
@@ -40,6 +42,7 @@ public class TicketSale {
             if (checkTicketState(TicketState.FREE, ticket)) {
                 ticket.setTicketState(TicketState.RESERVED);
                 ticket.setTicketOwner(reservationName);
+                preparedStatement.updateDB(ticket);
                 return true;
             }
             throw new TicketException(ticket.getTicketState());
@@ -51,6 +54,7 @@ public class TicketSale {
         if (checkTicketState(TicketState.RESERVED, ticket)) {
             ticket.setTicketState(TicketState.FREE);
             ticket.setTicketOwner(null);
+            preparedStatement.updateDB(ticket);
             return true;
         }
         throw new TicketException(ticket.getTicketState());
@@ -59,6 +63,7 @@ public class TicketSale {
     public synchronized boolean cancelTicket(Ticket ticket) {
         if (checkTicketState(TicketState.SOLD, ticket)) {
             ticket.setTicketState(TicketState.FREE);
+            preparedStatement.updateDB(ticket);
             return true;
         }
         throw new TicketException(ticket.getTicketState());

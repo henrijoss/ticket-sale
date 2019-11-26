@@ -15,26 +15,25 @@ import java.util.List;
 @WebListener
 public class MyServletContextListener implements ServletContextListener {
 
+    static ServletContext ctx;
+
     public void contextInitialized(ServletContextEvent sce) {
-        ServletContext ctx = sce.getServletContext();
-        TicketSale ticketSale = new TicketSale();
-        ctx.setAttribute("ticketSale", ticketSale);
+        ctx = sce.getServletContext();
         DataSource dataSource;
         try {
             Context initialContext = new InitialContext();
             dataSource = (DataSource) initialContext.lookup("java:comp/env/jdbc/TicketDB");
+            ctx.setAttribute("TicketSaleDB", dataSource);
             Connection connection = dataSource.getConnection();
-            System.out.println("erfolg");
-            ctx.setAttribute("tickets", dataSource);
-            ctx.setAttribute("initialStates", getInitialStates(dataSource));
+            TicketSale ticketSale = new TicketSale(getTicketsFromDB(dataSource));
+            ctx.setAttribute("ticketSale", ticketSale);
         } catch (SQLException | NamingException e) {
             System.out.println(e);
             e.printStackTrace();
         }
-
     }
 
-    public List<Ticket> getInitialStates(DataSource dataSource){
+    public List<Ticket> getTicketsFromDB(DataSource dataSource){
         try {
             Connection connection = dataSource.getConnection();
             Statement statement = connection.createStatement();

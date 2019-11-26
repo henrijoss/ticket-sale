@@ -16,11 +16,9 @@ public class TicketOperator extends HttpServlet {
                 request.getRequestDispatcher("/Operation_erfolgreich_ausgefuehrt.html").forward(request, response);
             } else {
                 request.getRequestDispatcher("/Fehler.jsp").forward(request, response);
-//                response.sendRedirect("Fehler.html");
             }
         } catch (NumberFormatException | ServletException e) {
             request.getRequestDispatcher("/Fehler.jsp").forward(request, response);
-//            response.sendRedirect("Fehler.html");
         }
     }
 
@@ -30,17 +28,17 @@ public class TicketOperator extends HttpServlet {
         switch (operation) {
             case "buyTicket":
                 int ticketNumber = Integer.parseInt(request.getParameter("ticketNumber"));
-                return ticketSale.buyTicket(ticketSale.getTickets()[ticketNumber-1]);
+                return ticketSale.buyTicket(ticketSale.getTickets().get(ticketNumber - 1));
             case "reservateTicket":
                 int ticketReservationNumber = Integer.parseInt(request.getParameter("ticketNumber"));
                 String ticketOwner = request.getParameter("ticketOwner");
-                return ticketSale.reserveTicket(ticketSale.getTickets()[ticketReservationNumber-1], ticketOwner);
+                return ticketSale.reserveTicket(ticketSale.getTickets().get(ticketReservationNumber - 1), ticketOwner);
             case "cancelTicket":
                 int ticketNumberToCancel = Integer.parseInt(request.getParameter("ticketNumber"));
-                return ticketSale.cancelTicket(ticketSale.getTickets()[ticketNumberToCancel-1]);
+                return ticketSale.cancelTicket(ticketSale.getTickets().get(ticketNumberToCancel - 1));
             case "cancelReservation":
                 int ticketReservationNumberToCancel = Integer.parseInt(request.getParameter("ticketNumber"));
-                return ticketSale.cancelTicketReservation(ticketSale.getTickets()[ticketReservationNumberToCancel-1]);
+                return ticketSale.cancelTicketReservation(ticketSale.getTickets().get(ticketReservationNumberToCancel - 1));
             case "stopReservations":
                 ticketSale.setReservationsPossible(false);
                 return true;

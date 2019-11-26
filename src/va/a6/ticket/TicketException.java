@@ -1,16 +1,10 @@
 package va.a6.ticket;
 
-import javax.servlet.jsp.PageContext;
-
 public class TicketException extends RuntimeException {
 
-//    public static String error;
     public TicketState ticketState;
 
     public TicketException(TicketState _ticketState) {
-//        super(showCorrectError(ticketState));
-//        error = showCorrectError(ticketState);
-//        ptx.setAttribute("error", showCorrectError(ticketState));
         this.ticketState = _ticketState;
     }
 
@@ -23,4 +17,10 @@ public class TicketException extends RuntimeException {
             default: return "error";
         }
     }
+
+    @Override
+    public String getMessage(){
+        return showCorrectError();
+    }
+
 }
