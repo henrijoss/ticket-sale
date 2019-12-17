@@ -1,6 +1,4 @@
 <%@ page import="va.a6.ticket.TicketSale" %>
-<%@ page import="va.a6.ticket.Ticket" %>
-<%@ page import="java.util.List" %>
 <%--
   Created by IntelliJ IDEA.
   User: henrijoss

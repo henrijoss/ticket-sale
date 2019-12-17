@@ -4,45 +4,43 @@ import java.util.List;
 
 public class TicketSale {
 
-    private TicketDBPreparedStatement preparedStatement = new TicketDBPreparedStatement();
-    private boolean reservationsPossible = true;
+    private TicketDBController ticketDBController = new TicketDBController();
+    private boolean reservationsPossible;
     private List<Ticket> tickets;
 
-    TicketSale(List<Ticket> _tickets) {
+    TicketSale(List<Ticket> _tickets, boolean _reservationsPossible) {
         this.tickets = _tickets;
+        this.reservationsPossible = _reservationsPossible;
     }
 
     public synchronized boolean isReservationsPossible() {
         return reservationsPossible;
     }
 
-    public synchronized void setReservationsPossible(boolean reservationsPossible) {
+    synchronized void setReservationsPossible(boolean reservationsPossible) {
         this.reservationsPossible = reservationsPossible;
+        ticketDBController.updateOptionsTable(reservationsPossible);
     }
 
     public synchronized List<Ticket> getTickets() {
         return tickets;
     }
 
-//    public void setTickets(Ticket[] tickets) {
-//        this.tickets = tickets;
-//    }
-
-    public synchronized boolean buyTicket(Ticket ticket) {
-        if (checkTicketState(TicketState.FREE, ticket)) {
+    synchronized boolean buyTicket(Ticket ticket) {
+        if (isTicketInCorrectState(TicketState.FREE, ticket)) {
             ticket.setTicketState(TicketState.SOLD);
-            preparedStatement.updateDB(ticket);
+            ticketDBController.updateTicketTable(ticket);
             return true;
         }
         throw new TicketException(ticket.getTicketState());
     }
 
-    public synchronized boolean reserveTicket(Ticket ticket, String reservationName) {
+    synchronized boolean reserveTicket(Ticket ticket, String reservationName) {
         if (reservationsPossible) {
-            if (checkTicketState(TicketState.FREE, ticket)) {
+            if (isTicketInCorrectState(TicketState.FREE, ticket)) {
                 ticket.setTicketState(TicketState.RESERVED);
                 ticket.setTicketOwner(reservationName);
-                preparedStatement.updateDB(ticket);
+                ticketDBController.updateTicketTable(ticket);
                 return true;
             }
             throw new TicketException(ticket.getTicketState());
@@ -50,26 +48,26 @@ public class TicketSale {
         throw new TicketSaleException("Reservierungen sind nicht mehr möglich");
     }
 
-    public synchronized boolean cancelTicketReservation(Ticket ticket) {
-        if (checkTicketState(TicketState.RESERVED, ticket)) {
+    synchronized boolean cancelTicketReservation(Ticket ticket) {
+        if (isTicketInCorrectState(TicketState.RESERVED, ticket)) {
             ticket.setTicketState(TicketState.FREE);
             ticket.setTicketOwner(null);
-            preparedStatement.updateDB(ticket);
+            ticketDBController.updateTicketTable(ticket);
             return true;
         }
         throw new TicketException(ticket.getTicketState());
     }
 
-    public synchronized boolean cancelTicket(Ticket ticket) {
-        if (checkTicketState(TicketState.SOLD, ticket)) {
+    synchronized boolean cancelTicket(Ticket ticket) {
+        if (isTicketInCorrectState(TicketState.SOLD, ticket)) {
             ticket.setTicketState(TicketState.FREE);
-            preparedStatement.updateDB(ticket);
+            ticketDBController.updateTicketTable(ticket);
             return true;
         }
         throw new TicketException(ticket.getTicketState());
     }
 
-    private synchronized boolean checkTicketState(TicketState ticketState, Ticket ticket) {
-        return ticket.getTicketState() == ticketState;
+    private synchronized boolean isTicketInCorrectState(TicketState ticketState, Ticket ticket) {
+        return ticketDBController.getTicketStateFromDB(ticket.getId()).equals(ticketState);
     }
 }

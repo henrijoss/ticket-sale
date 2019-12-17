@@ -24,30 +24,44 @@ public class MyServletContextListener implements ServletContextListener {
             Context initialContext = new InitialContext();
             dataSource = (DataSource) initialContext.lookup("java:comp/env/jdbc/TicketDB");
             ctx.setAttribute("TicketSaleDB", dataSource);
-            Connection connection = dataSource.getConnection();
-            TicketSale ticketSale = new TicketSale(getTicketsFromDB(dataSource));
+            TicketSale ticketSale = new TicketSale(getTicketsFromDB(dataSource), getOptionsFromDB(dataSource));
             ctx.setAttribute("ticketSale", ticketSale);
-        } catch (SQLException | NamingException e) {
-            System.out.println(e);
+            System.out.println("Database loaded successfully");
+        } catch (NamingException e) {
             e.printStackTrace();
         }
     }
 
-    public List<Ticket> getTicketsFromDB(DataSource dataSource){
-        try {
-            Connection connection = dataSource.getConnection();
-            Statement statement = connection.createStatement();
+    public List<Ticket> getTicketsFromDB(DataSource dataSource) {
+        String sql = "SELECT * FROM tickets";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             List<Ticket> list = new ArrayList<>();
-            ResultSet rs = statement.executeQuery("SELECT * FROM tickets");
-
+            ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 Ticket ticket = new Ticket(rs.getInt("id"));
-                ticket.setTicketState(TicketState.FREE);
+                ticket.setTicketState(TicketState.valueOf(rs.getString("state")));
                 ticket.setTicketOwner(rs.getString("owner"));
                 list.add(ticket);
             }
             return list;
-        } catch (SQLException e){
+        } catch (SQLException e) {
+            System.out.println("Fehler" + e);
+            throw new RuntimeException();
+        }
+    }
+
+    public boolean getOptionsFromDB(DataSource dataSource) {
+        String sql = "SELECT reservationsPossible FROM options";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            ResultSet rs = preparedStatement.executeQuery();
+            boolean reservationsPossible = true;
+            while (rs.next()) {
+                reservationsPossible = rs.getBoolean("reservationsPossible");
+            }
+            return reservationsPossible;
+        } catch (SQLException e) {
             System.out.println("Fehler" + e);
             throw new RuntimeException();
         }

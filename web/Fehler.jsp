@@ -9,7 +9,6 @@
 <body>
     <h1>Fehler</h1>
     <p>Die Operation konnte nicht ausgeführt werden</p>
-<%--    <p>Ursache: <%= ((TicketException)exception).showCorrectError() %></p>--%>
     <p>Ursache: <%= exception.getMessage() %></p>
     <a href="index.jsp">Zurück zur Startseite</a>
 </body>

@@ -1,4 +1,5 @@
 <%@ page import="va.a6.ticket.TicketSale" %>
+<%--
   Created by IntelliJ IDEA.
   User: henrijoss
   Date: 05.11.19
