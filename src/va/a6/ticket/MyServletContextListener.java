@@ -8,6 +8,10 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import javax.sql.DataSource;
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +28,13 @@ public class MyServletContextListener implements ServletContextListener {
             Context initialContext = new InitialContext();
             dataSource = (DataSource) initialContext.lookup("java:comp/env/jdbc/TicketDB");
             ctx.setAttribute("TicketSaleDB", dataSource);
+//            Registry registry = startRegistry();
             TicketSale ticketSale = new TicketSale(getTicketsFromDB(dataSource), getOptionsFromDB(dataSource));
             ctx.setAttribute("ticketSale", ticketSale);
+//            registry.bind("TicketSale", ticketSale);
+            System.out.println("RMI started on port 1099");
             System.out.println("Database loaded successfully");
-        } catch (NamingException e) {
+        } catch (NamingException | RemoteException e) {
             e.printStackTrace();
         }
     }
@@ -65,5 +72,16 @@ public class MyServletContextListener implements ServletContextListener {
             System.out.println("Fehler" + e);
             throw new RuntimeException();
         }
+    }
+
+    private Registry startRegistry() {
+        Registry registry = null;
+        try {
+            registry = LocateRegistry
+                    .createRegistry(1099);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return registry;
     }
 }

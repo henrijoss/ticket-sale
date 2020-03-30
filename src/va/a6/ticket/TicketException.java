@@ -11,15 +11,19 @@ public class TicketException extends RuntimeException {
     public String showCorrectError() {
         String ticketMessage = "Das Ticket ist bereits ";
         switch (this.ticketState) {
-            case FREE: return ticketMessage + "frei";
-            case SOLD: return ticketMessage + "verkauft";
-            case RESERVED: return ticketMessage + "reserviert";
-            default: return "error";
+            case FREE:
+                return ticketMessage + "frei";
+            case SOLD:
+                return ticketMessage + "verkauft";
+            case RESERVED:
+                return ticketMessage + "reserviert";
+            default:
+                return "error";
         }
     }
 
     @Override
-    public String getMessage(){
+    public String getMessage() {
         return showCorrectError();
     }
 

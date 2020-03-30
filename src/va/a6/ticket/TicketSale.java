@@ -1,14 +1,16 @@
 package va.a6.ticket;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
-public class TicketSale {
+public class TicketSale extends UnicastRemoteObject implements TicketSale_Interface {
 
     private TicketDBController ticketDBController = new TicketDBController();
     private boolean reservationsPossible;
     private List<Ticket> tickets;
 
-    TicketSale(List<Ticket> _tickets, boolean _reservationsPossible) {
+    TicketSale(List<Ticket> _tickets, boolean _reservationsPossible) throws RemoteException {
         this.tickets = _tickets;
         this.reservationsPossible = _reservationsPossible;
     }
@@ -17,7 +19,7 @@ public class TicketSale {
         return reservationsPossible;
     }
 
-    synchronized void setReservationsPossible(boolean reservationsPossible) {
+    public synchronized void setReservationsPossible(boolean reservationsPossible) {
         this.reservationsPossible = reservationsPossible;
         ticketDBController.updateOptionsTable(reservationsPossible);
     }
@@ -26,7 +28,7 @@ public class TicketSale {
         return tickets;
     }
 
-    synchronized boolean buyTicket(Ticket ticket) {
+    public synchronized boolean buyTicket(Ticket ticket) {
         if (isTicketInCorrectState(TicketState.FREE, ticket)) {
             ticket.setTicketState(TicketState.SOLD);
             ticketDBController.updateTicketTable(ticket);
@@ -35,7 +37,7 @@ public class TicketSale {
         throw new TicketException(ticket.getTicketState());
     }
 
-    synchronized boolean reserveTicket(Ticket ticket, String reservationName) {
+    public synchronized boolean reserveTicket(Ticket ticket, String reservationName) {
         if (reservationsPossible) {
             if (isTicketInCorrectState(TicketState.FREE, ticket)) {
                 ticket.setTicketState(TicketState.RESERVED);
@@ -48,7 +50,7 @@ public class TicketSale {
         throw new TicketSaleException("Reservierungen sind nicht mehr möglich");
     }
 
-    synchronized boolean cancelTicketReservation(Ticket ticket) {
+    public synchronized boolean cancelTicketReservation(Ticket ticket) {
         if (isTicketInCorrectState(TicketState.RESERVED, ticket)) {
             ticket.setTicketState(TicketState.FREE);
             ticket.setTicketOwner(null);
@@ -58,7 +60,7 @@ public class TicketSale {
         throw new TicketException(ticket.getTicketState());
     }
 
-    synchronized boolean cancelTicket(Ticket ticket) {
+    public synchronized boolean cancelTicket(Ticket ticket) {
         if (isTicketInCorrectState(TicketState.SOLD, ticket)) {
             ticket.setTicketState(TicketState.FREE);
             ticketDBController.updateTicketTable(ticket);
@@ -67,7 +69,7 @@ public class TicketSale {
         throw new TicketException(ticket.getTicketState());
     }
 
-    private synchronized boolean isTicketInCorrectState(TicketState ticketState, Ticket ticket) {
+    public synchronized boolean isTicketInCorrectState(TicketState ticketState, Ticket ticket) {
         return ticketDBController.getTicketStateFromDB(ticket.getId()).equals(ticketState);
     }
 }
